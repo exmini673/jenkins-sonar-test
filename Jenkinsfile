@@ -18,7 +18,7 @@ pipeline {
         githubPush()
     }
     stages {
-        stage('maven install') {
+        stage('maven build, test, packageing(war)') {
             steps {
                 sh 'mvn clean install'
             }
