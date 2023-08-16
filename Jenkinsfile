@@ -5,6 +5,7 @@ pipeline {
             reuseNode true
             registryUrl 'https://index.docker.io/v1/'
             registryCredentialsId 'docker-hub'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
     environment {
