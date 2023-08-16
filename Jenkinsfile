@@ -32,6 +32,9 @@ pipeline {
                             -Dsonar.java.binaries=target"
                     }
                 }
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
         stage('github create release') {
