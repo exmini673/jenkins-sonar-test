@@ -23,8 +23,8 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv {
-                        sh  "./mvnw verify sonar:sonar -Dsonar.java.source=17 
--Dsonar.projectKey=sonar_project01 -Dsonar.sources=src/main/ -Dsonar.tests=src/test/ 
+                        sh "./mvnw verify sonar:sonar -Dsonar.java.source=17 \
+-Dsonar.projectKey=sonar_project01 -Dsonar.sources=src/main/ -Dsonar.tests=src/test/ \
 -Dsonar.java.binaries=target"
                     }
                 }
