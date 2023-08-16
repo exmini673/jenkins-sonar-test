@@ -18,30 +18,28 @@ pipeline {
         githubPush()
     }
     stages {
-        stage('maven build, test, packageing(war)'){
+        stage('maven build, test, packaging(war)') {
             steps {
-            sh 'mvn clean install'
-           }
-        }
-        stages {
-            stage('Compile') {
-                steps {
-                    sh "chmod +x mvnw"
-                    sh "./mvnw clean"
-                    sh "./mvnw compile"
-                }
+                sh 'mvn clean install'
             }
-            stage('Testing & QC') {
-                steps {
-                    script {
-                        withSonarQubeEnv {
-                            sh "./mvnw verify sonar:sonar -Dsonar.java.source=17 \
-                                -Dsonar.projectKey=sonar_project01 -Dsonar.sources=src/main/ -Dsonar.tests=src/test/ \
-                                -Dsonar.java.binaries=target"
-                        }
+        }
+        stage('Compile') {
+            steps {
+                sh "chmod +x mvnw"
+                sh "./mvnw clean"
+                sh "./mvnw compile"
+            }
+        }
+        stage('Testing & QC') {
+            steps {
+                script {
+                    withSonarQubeEnv {
+                        sh "./mvnw verify sonar:sonar -Dsonar.java.source=17 \
+                            -Dsonar.projectKey=sonar_project01 -Dsonar.sources=src/main/ -Dsonar.tests=src/test/ \
+                            -Dsonar.java.binaries=target"
                     }
                 }
             }
-      }
+        }
+    }
 }
-
