@@ -61,7 +61,6 @@ pipeline {
                 """
             }
         }
-    }
         stage('github create release') {
             steps {
                 script {
