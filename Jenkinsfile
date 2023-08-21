@@ -14,8 +14,9 @@ pipeline {
         TAG_VERSION = 'v1.0.0'
         SONAR_AUTH_TOKEN = credentials('sonar-token')
         SONAR_HOST_URL = 'https://192.168.10.15:9000'
+        SONAR_PROJECT_KEY = 'sonar_project01'
        }
-
+    
     triggers {
         githubPush()
     }
@@ -31,16 +32,15 @@ pipeline {
                     withSonarQubeEnv('sonar') {
                         sh """
                             docker run --rm \
+                              --add-host sonar-server:192.168.10.15 \
                               -e SONAR_HOST_URL=$SONAR_HOST_URL \
                               -e SONAR_LOGIN=$SONAR_AUTH_TOKEN \
-                              -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=sonar_project01' \
-                              -e SONAR_PROJECT_BASE_DIR=/usr/src \
-                              -e SONAR_PROJECT_KEY=sonar_project01 \
-                              -e SONAR_SOURCES=. \
-                              -e SONAR_JAVA_BINARIES=target/classes \
+                              -e SONAR_SCANNER_OPTS='-Dsonar.verbose=true -Dsonar.projectKey=$SONAR_PROJECT_KEY' \
                               -v /var/lib/docker/volumes/jenkins-volume/_data/workspace/jenkins-sonar-test:/usr/src \
-                              sonarsource/sonar-scanner-cli
+                              sonarsource/sonar-scanner-cli:latest
                         """
+    
+
                     }
                 }
                 timeout(time: 1, unit: 'MINUTES') {
