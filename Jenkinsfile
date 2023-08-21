@@ -45,6 +45,7 @@ pipeline {
           }
        }
     }
+}
         // stage('압축한 소스 코드 도커 이미지로 빌드 및 푸쉬') {
         //     steps {
         //         sh "docker login -u ${DOCKER_CREDENTIAL_USR} -p ${DOCKER_CREDENTIAL_PSW}"
