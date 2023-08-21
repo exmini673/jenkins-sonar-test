@@ -12,8 +12,8 @@ pipeline {
         GIT_REPO = 'jenkins-sonar-test'
         GIT_USERNAME = 'exmini673'
         TAG_VERSION = 'v1.0.0'
-        SONAR_HOST_URL = 'https://192.168.10.15:9000' // SonarQube 서버 URL을 여기에 입력
-        SONAR_AUTH_TOKEN = credentials('jenkins-sonar-token') // SonarQube의 인증 토큰을 여기에 입력
+        SONAR_HOST_URL = 'https://your-sonarqube-server-url' // SonarQube 서버 URL을 여기에 입력
+        SONAR_AUTH_TOKEN = credentials('sonar-token-id') // SonarQube의 인증 토큰을 여기에 입력
     }
 
     triggers {
