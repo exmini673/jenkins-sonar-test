@@ -39,8 +39,6 @@ pipeline {
                               -v /var/lib/docker/volumes/jenkins-volume/_data/workspace/jenkins-sonar-test:/usr/src \
                               sonarsource/sonar-scanner-cli:latest
                         """
-    
-
                     }
                 }
                 timeout(time: 1, unit: 'MINUTES') {
