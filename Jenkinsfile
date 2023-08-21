@@ -32,7 +32,7 @@ pipeline {
                             -e SONAR_HOST_URL=$SONAR_HOST_URL \
                             -e SONAR_LOGIN=$SONAR_AUTH_TOKEN \
                             -e SONAR_SCANNER_OPTS='-Dsonar.verbose=true -Dsonar.projectKey=sonar_project01' \
-                            -v $(pwd):/usr/src \
+                            -v \$(pwd):/usr/src \
                             sonarsource/sonar-scanner-cli
                       """
                   }
