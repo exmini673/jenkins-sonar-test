@@ -31,7 +31,7 @@ pipeline {
                           docker run --rm \
                             -e SONAR_HOST_URL=$SONAR_HOST_URL \
                             -e SONAR_LOGIN=$SONAR_AUTH_TOKEN \
-                            -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=projet \
+                            -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=sonar_project01 \
                             -v \$(pwd):/usr/src \
                             sonarsource/sonar-scanner-cli
                       """
@@ -57,7 +57,7 @@ pipeline {
                 sh "docker -H tcp://docker-server:2375 rm web1"
                 sh """
                     docker -H tcp://docker-server:2375 run -it -d -p 8080:80 --name web1 \
-                    abhyuni/static-web:${TAG_VERSION}
+                    hiwill41/static-web:${TAG_VERSION}
                 """
             }
         }
