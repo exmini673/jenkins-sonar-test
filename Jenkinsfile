@@ -26,7 +26,7 @@ pipeline {
         stage('Testing & QC') {
            steps {
               script {
-                  withSonarQubeEnv('sonar9.9') {
+                  withSonarQubeEnv('sonar') {
                       sh """
                           docker run --rm \
                             -e SONAR_HOST_URL=$SONAR_HOST_URL \
