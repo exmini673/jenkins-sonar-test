@@ -26,13 +26,13 @@ pipeline {
         stage('Testing & QC') {
             steps {
                 script {
-                    withSonarQubeEnv('sonar9.9') {
+                    withSonarQubeEnv('sonar') {
                         sh """
                             docker run --rm \
                               -e SONAR_HOST_URL=$SONAR_HOST_URL \
                               -e SONAR_LOGIN=$SONAR_AUTH_TOKEN \
                               -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=sonar_project01' \
-                              -v \var\lib\docker\volumes\jenkins-volume\_data\workspace\jenkins-sonar-test:/usr/src \
+                              -v /var/lib/docker/volumes/jenkins-volume/_data/workspace/jenkins-sonar-test:/usr/src \
                               sonarsource/sonar-scanner-cli
                         """
                     }
