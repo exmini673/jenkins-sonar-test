@@ -24,19 +24,24 @@ pipeline {
             }
         }
         stage('Testing & QC') {
-            steps {
-                script {
-                    withSonarQubeEnv {
-                        sh "mvn verify sonar:sonar -Dsonar.java.source=17 \
-                            -Dsonar.projectKey=sonar_project01 -Dsonar.sources=src/main/ -Dsonar.tests=src/test/ \
-                            -Dsonar.java.binaries=target"
-                    }
-                }
-                timeout(time: 1, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
+           steps {
+              script {
+                  withSonarQubeEnv('sonar9.9') {
+                      sh """
+                          docker run --rm \
+                            -e SONAR_HOST_URL=$SONAR_HOST_URL \
+                            -e SONAR_LOGIN=$SONAR_AUTH_TOKEN \
+                            -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=static-web' \
+                            -v \$(pwd):/usr/src \
+                            sonarsource/sonar-scanner-cli
+                      """
+                  }
+              }
+              timeout(time: 1, unit: 'MINUTES') {
+                  waitForQualityGate abortPipeline: true
+              }
+          }
+       }
         stage('github create release') {
             steps {
                 script {
