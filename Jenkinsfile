@@ -12,8 +12,6 @@ pipeline {
         GIT_REPO = 'jenkins-sonar-test'
         GIT_USERNAME = 'exmini673'
         TAG_VERSION = 'v1.0.0'
-        SONAR_HOST_URL = 'https://your-sonarqube-server-url' // SonarQube 서버 URL을 여기에 입력
-        SONAR_AUTH_TOKEN = credentials('sonar-token-id') // SonarQube의 인증 토큰을 여기에 입력
     }
 
     triggers {
@@ -26,26 +24,19 @@ pipeline {
             }
         }
         stage('Testing & QC') {
-           steps {
-              script {
-                  withSonarQubeEnv('sonar9.9') {
-                      sh """
-                          docker run --rm \
-                            -e SONAR_HOST_URL=$SONAR_HOST_URL \
-                            -e SONAR_LOGIN=$SONAR_AUTH_TOKEN \
-                            -e SONAR_SCANNER_OPTS='-Dsonar.verbose=true -Dsonar.projectKey=sonar_project01' \
-                            -v \$(pwd):/usr/src \
-                            sonarsource/sonar-scanner-cli
-                      """
-                  }
-              }
-              timeout(time: 1, unit: 'MINUTES') {
-                  waitForQualityGate abortPipeline: true
-              }
-          }
-       }
-    }
-}
+            steps {
+                script {
+                    withSonarQubeEnv {
+                        sh "mvn verify sonar:sonar -Dsonar.java.source=17 \
+                            -Dsonar.projectKey=sonar_mz_project01 -Dsonar.sources=src/main/ -Dsonar.tests=src/test/ \
+                            -Dsonar.java.binaries=target"
+                    }
+                }
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
         // stage('압축한 소스 코드 도커 이미지로 빌드 및 푸쉬') {
         //     steps {
         //         sh "docker login -u ${DOCKER_CREDENTIAL_USR} -p ${DOCKER_CREDENTIAL_PSW}"
