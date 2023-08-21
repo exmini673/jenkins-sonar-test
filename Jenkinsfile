@@ -14,7 +14,7 @@ pipeline {
         TAG_VERSION = 'v1.0.0'
        // SONAR_AUTH_TOKEN = credentials('sonar-token')
         SONAR_HOST_URL = 'https://192.168.10.15:9000'
-        SONAR_PROJECT_KEY = 'sonar_project01'
+        SONAR_PROJECT_KEY = 'sonar_mz_project01'
        }
     
     triggers {
