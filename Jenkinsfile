@@ -12,7 +12,9 @@ pipeline {
         GIT_REPO = 'jenkins-sonar-test'
         GIT_USERNAME = 'exmini673'
         TAG_VERSION = 'v1.0.0'
-    }
+        SONAR_AUTH_TOKEN = credentials('sonar-token')
+        SONAR_HOST_URL = 'https://192.168.10.15:9000'
+       }
 
     triggers {
         githubPush()
