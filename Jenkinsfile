@@ -35,8 +35,7 @@ pipeline {
                               --add-host sonar-server:192.168.10.15 \
                               -e SONAR_HOST_URL=$SONAR_HOST_URL \
                               -e SONAR_LOGIN=$SONAR_AUTH_TOKEN \
-                              -e SONAR_SCANNER_OPTS='-Dsonar.verbose=true -Dsonar.projectKey=$SONAR_PROJECT_KEY' \
-                              -e SONAR_SCANNER_OPTS='-Dsonar.java.binaries=/var/lib/docker/volumes/jenkins-volume/_data/workspace/target/classes' \
+                              -e 'SONAR_SCANNER_OPTS=-Dsonar.projectKey=sonar_mz_project01 -Dsonar.java.binaries=/var/lib/docker/volumes/jenkins-volume/_data/workspace/target/classes -Dsonar.verbose=true' \
                               -v /var/lib/docker/volumes/jenkins-volume/_data/workspace/jenkins-sonar-test:/usr/src \
                               sonarsource/sonar-scanner-cli:latest
                         """
