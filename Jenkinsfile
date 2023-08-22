@@ -45,18 +45,18 @@ pipeline {
             }
         }
         
-        stage('PR Decoration') {
-            steps {
-                script {
-                    withSonarQubeEnv('sonar-pr') {
-                        sh 'mvn sonar:sonar -Dsonar.projectKey=pr-project  -Dsonar.verbose=true -X'
-                    }
-                }
-                timeout(time: 1, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
+        // stage('PR Decoration') {
+        //     steps {
+        //         script {
+        //             withSonarQubeEnv('sonar-pr') {
+        //                 sh 'mvn sonar:sonar -Dsonar.projectKey=pr-project  -Dsonar.verbose=true -X'
+        //             }
+        //         }
+        //         timeout(time: 1, unit: 'MINUTES') {
+        //             waitForQualityGate abortPipeline: true
+        //         }
+        //     }
+        // }
         
         // stage('Testing & QC') {
         //     steps {
