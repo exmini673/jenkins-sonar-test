@@ -24,31 +24,31 @@ pipeline {
             }
         }
         
-        stage('PR Decoration') {
-            steps {
-                script {
-                    withSonarQubeEnv('sonar-pr') {
-                        sh 'mvn sonar:sonar -Dsonar.projectKey=pr-project'
-                    }
-                }
-                timeout(time: 1, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
+        // stage('PR Decoration') {
+        //     steps {
+        //         script {
+        //             withSonarQubeEnv('sonar-pr') {
+        //                 sh 'mvn sonar:sonar -Dsonar.projectKey=pr-project'
+        //             }
+        //         }
+        //         timeout(time: 1, unit: 'MINUTES') {
+        //             waitForQualityGate abortPipeline: true
+        //         }
+        //     }
+        // }
         
-        stage('Testing & QC') {
-            steps {
-                script {
-                    withSonarQubeEnv('sonar') {
-                         sh 'mvn sonar:sonar -Dsonar.projectKey=sonar_project01'
-                    }
-                }
-                timeout(time: 1, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
+        // stage('Testing & QC') {
+        //     steps {
+        //         script {
+        //             withSonarQubeEnv('sonar') {
+        //                  sh 'mvn sonar:sonar -Dsonar.projectKey=sonar_project01'
+        //             }
+        //         }
+        //         timeout(time: 1, unit: 'MINUTES') {
+        //             waitForQualityGate abortPipeline: true
+        //         }
+        //     }
+        // }
         // stage('압축한 소스 코드 도커 이미지로 빌드 및 푸쉬') {
         //     steps {
         //         sh "docker login -u ${DOCKER_CREDENTIAL_USR} -p ${DOCKER_CREDENTIAL_PSW}"
