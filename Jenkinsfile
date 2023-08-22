@@ -50,7 +50,14 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv('sonar') {
-                        sh 'mvn sonar:sonar -Dsonar.projectKey=sonar_project01  -Dsonar.verbose=true -X'
+                       sh """
+                            docker run --rm \
+                              -e SONAR_HOST_URL=$SONAR_HOST_URL \
+                              -e SONAR_LOGIN=$SONAR_AUTH_TOKEN \
+                              -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=sonar_project01  -Dsonar.verbose=true -X' \
+                              -v \$(pwd):/usr/src \
+                              sonarsource/sonar-scanner-cli
+                        """
                     }
                 }
                 timeout(time: 1, unit: 'MINUTES') {
@@ -63,7 +70,14 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv('sonar-pr') {
-                         sh 'mvn sonar:sonar -Dsonar.projectKey=pr-project'
+                         sh """
+                            docker run --rm \
+                              -e SONAR_HOST_URL=$SONAR_HOST_URL \
+                              -e SONAR_LOGIN=$SONAR_AUTH_TOKEN \
+                              -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=pr-project  -Dsonar.verbose=true -X' \
+                              -v \$(pwd):/usr/src \
+                              sonarsource/sonar-scanner-cli
+                        """
                     }
                 }
                 timeout(time: 1, unit: 'MINUTES') {
