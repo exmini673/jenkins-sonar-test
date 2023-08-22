@@ -32,11 +32,11 @@ pipeline {
                             url: "https://github.com/exmini673/${GIT_REPO}.git"
                         ]
                     ],
-                    branches: [
-                        [
-                            name: "dev"
-                        ]
-                    ]
+                    // branches: [
+                    //     [
+                    //         name: "dev"
+                    //     ]
+                    // ]
                 )
             }
         stage('maven build, test, packageing(war)') {
