@@ -23,6 +23,11 @@ pipeline {
     }
     stages {
         // 기본 체크아웃 대신 동작할 스테이지
+       stage('maven build, test, packageing(war)') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
         stage("GitHub dev branch checkout") {
             steps {
                 checkout scm: scmGit(
