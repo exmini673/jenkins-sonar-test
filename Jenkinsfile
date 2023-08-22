@@ -70,25 +70,6 @@ pipeline {
                 }
             }
         }
-        // stage('압축한 소스 코드 도커 이미지로 빌드 및 푸쉬') {
-        //     steps {
-        //         sh "docker login -u ${DOCKER_CREDENTIAL_USR} -p ${DOCKER_CREDENTIAL_PSW}"
-        //         sh "docker build -t ${DOCKER_CREDENTIAL_USR}/${PROJECT_NAME}:latest -f .docker/Dockerfile ."
-        //         sh "docker tag ${DOCKER_CREDENTIAL_USR}/${PROJECT_NAME}:latest ${DOCKER_CREDENTIAL_USR}/${PROJECT_NAME}:${TAG_VERSION}"
-        //         sh "docker push ${DOCKER_CREDENTIAL_USR}/${PROJECT_NAME}:${TAG_VERSION}"
-        //         sh "docker push ${DOCKER_CREDENTIAL_USR}/${PROJECT_NAME}:latest"
-        //     }
-        // }
-        // stage('도커 허브에 푸쉬한 이미지로 docker-server 에 동작') {
-        //     steps {
-        //         sh "docker -H tcp://docker-server:2375 stop web1"
-        //         sh "docker -H tcp://docker-server:2375 rm web1"
-        //         sh """
-        //             docker -H tcp://docker-server:2375 run -it -d -p 8080:80 --name web1 \
-        //             hiwill41/static-web:${TAG_VERSION}
-        //         """
-        //     }
-        // }
         // stage('github create release') {
         //     steps {
         //         script {
@@ -129,4 +110,5 @@ pipeline {
         //         }
         //     }       
         // }
+    }
 }
