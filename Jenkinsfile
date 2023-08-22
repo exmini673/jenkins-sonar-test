@@ -12,9 +12,6 @@ pipeline {
         GIT_REPO = 'jenkins-sonar-test'
         GIT_USERNAME = 'exmini673'
         TAG_VERSION = 'v1.0.0'
-       // SONAR_AUTH_TOKEN = credentials('sonar-token')
-        SONAR_HOST_URL = 'https://192.168.10.15:9000'
-        SONAR_PROJECT_KEY = 'sonar_project01'
        }
     
     triggers {
@@ -24,6 +21,26 @@ pipeline {
         stage('maven build, test, packageing(war)') {
             steps {
                 sh 'mvn clean install'
+            }
+        }
+        stage('PR Decoration') {
+            steps {
+                script {
+                    withSonarQubeEnv('sonar-pr') {
+                        sh """
+                            docker run --rm \
+                              --add-host sonar-server:192.168.10.15 \
+                              -e SONAR_HOST_URL=$SONAR_HOST_URL \
+                              -e SONAR_LOGIN=$SONAR_AUTH_TOKEN \
+                              -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=sonar_project01 -Dsonar.java.binaries=./target -Dsonar.verbose=true' \
+                              -v /var/lib/docker/volumes/jenkins-volume/_data/workspace/jenkins-sonar-test:/usr/src \
+                              sonarsource/sonar-scanner-cli:latest
+                        """
+                    }
+                }
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
         stage('Testing & QC') {
