@@ -54,7 +54,7 @@ pipeline {
                             docker run --rm \
                               -e SONAR_HOST_URL=$SONAR_HOST_URL \
                               -e SONAR_LOGIN=$SONAR_AUTH_TOKEN \
-                              -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=sonar_project01  -Dsonar.verbose=true -X' \
+                              -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=sonar_project01  -Dsonar.verbose=true' \
                               -v \$(pwd):/usr/src \
                               sonarsource/sonar-scanner-cli
                         """
@@ -74,7 +74,7 @@ pipeline {
                             docker run --rm \
                               -e SONAR_HOST_URL=$SONAR_HOST_URL \
                               -e SONAR_LOGIN=$SONAR_AUTH_TOKEN \
-                              -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=pr-project  -Dsonar.verbose=true -X' \
+                              -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=pr-project  -Dsonar.verbose=true' \
                               -v \$(pwd):/usr/src \
                               sonarsource/sonar-scanner-cli
                         """
