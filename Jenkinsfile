@@ -23,58 +23,53 @@ pipeline {
     }
     stages {
         // 기본 체크아웃 대신 동작할 스테이지
-       stage('maven build, test, packageing(war)') {
-            steps {
-                sh 'mvn clean install'
-            }
-        }
-        stage("GitHub dev branch checkout") {
-            steps {
-                checkout scm: scmGit(
-                    userRemoteConfigs: [
-                        [
-                            credentialsId: "jenkins-sonar-token",
-                            url: "https://github.com/exmini673/${GIT_REPO}.git"
-                        ]
-                    ],
-                    // branches: [
-                    //     [
-                    //         name: "dev"
-                    //     ]
-                    // ]
-                )
-            }
+        // stage("GitHub dev branch checkout") {
+        //     steps {
+        //         checkout scm: scmGit(
+        //             userRemoteConfigs: [
+        //                 [
+        //                     credentialsId: "jenkins-sonar-token",
+        //                     url: "https://github.com/exmini673/${GIT_REPO}.git"
+        //                 ]
+        //             ],
+        //             // branches: [
+        //             //     [
+        //             //         name: "dev"
+        //             //     ]
+        //             // ]
+        //         )
+        //     }
         stage('maven build, test, packageing(war)') {
             steps {
                 sh 'mvn clean install'
             }
         }
         
-        // stage('PR Decoration') {
-        //     steps {
-        //         script {
-        //             withSonarQubeEnv('sonar-pr') {
-        //                 sh 'mvn sonar:sonar -Dsonar.projectKey=pr-project  -Dsonar.verbose=true -X'
-        //             }
-        //         }
-        //         timeout(time: 1, unit: 'MINUTES') {
-        //             waitForQualityGate abortPipeline: true
-        //         }
-        //     }
-        // }
+        stage('Testing & QC') {
+            steps {
+                script {
+                    withSonarQubeEnv('sonar') {
+                        sh 'mvn sonar:sonar -Dsonar.projectKey=sonar_project01  -Dsonar.verbose=true -X'
+                    }
+                }
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
         
-        // stage('Testing & QC') {
-        //     steps {
-        //         script {
-        //             withSonarQubeEnv('sonar') {
-        //                  sh 'mvn sonar:sonar -Dsonar.projectKey=sonar_project01'
-        //             }
-        //         }
-        //         timeout(time: 1, unit: 'MINUTES') {
-        //             waitForQualityGate abortPipeline: true
-        //         }
-        //     }
-        // }
+        stage('PR Decoration') {
+            steps {
+                script {
+                    withSonarQubeEnv('sonar-pr') {
+                         sh 'mvn sonar:sonar -Dsonar.projectKey=pr-project'
+                    }
+                }
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
         // stage('압축한 소스 코드 도커 이미지로 빌드 및 푸쉬') {
         //     steps {
         //         sh "docker login -u ${DOCKER_CREDENTIAL_USR} -p ${DOCKER_CREDENTIAL_PSW}"
