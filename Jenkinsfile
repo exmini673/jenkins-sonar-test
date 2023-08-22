@@ -23,22 +23,22 @@ pipeline {
     }
     stages {
         // 기본 체크아웃 대신 동작할 스테이지
-        // stage("GitHub dev branch checkout") {
-        //     steps {
-        //         checkout scm: scmGit(
-        //             userRemoteConfigs: [
-        //                 [
-        //                     credentialsId: "jenkins-sonar-token",
-        //                     url: "https://github.com/exmini673/${GIT_REPO}.git"
-        //                 ]
-        //             ],
-        //             // branches: [
-        //             //     [
-        //             //         name: "dev"
-        //             //     ]
-        //             // ]
-        //         )
-        //     }
+        stage("GitHub dev branch checkout") {
+            steps {
+                checkout scm: scmGit(
+                    userRemoteConfigs: [
+                        [
+                            credentialsId: "jenkins-sonar-token",
+                            url: "https://github.com/exmini673/${GIT_REPO}.git"
+                        ]
+                    ],
+                    // branches: [
+                    //     [
+                    //         name: "dev"
+                    //     ]
+                    // ]
+                )
+            }
         stage('maven build, test, packageing(war)') {
             steps {
                 sh 'mvn clean install'
