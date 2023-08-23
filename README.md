@@ -1,3 +1,3 @@
 # jenkins-sonar-test
 
-rlease-0.0.1 생성
+소나큐브 pr test용
