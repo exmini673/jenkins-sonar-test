@@ -21,10 +21,6 @@ pipeline {
         // 트리거 발생할 때 동작하는 기본 체크아웃 과정 생략
         skipDefaultCheckout(true)
     }
-    options {
-        // 트리거 발생할 때 동작하는 기본 체크아웃 과정 생략
-        skipDefaultCheckout(true)
-    }
     stages {
         // 기본 체크아웃 대신 동작할 스테이지
         stage("GitHub dev branch checkout") {
