@@ -20,14 +20,6 @@ pipeline {
         skipDefaultCheckout(true)
     }
     stages {
-        stage('Build') {
-            steps {
-                script {
-                    def pullRequestId = params.ghprbPullId
-                    echo "GitHub Pull Request ID: ${pullRequestId}"
-                }
-            }
-        }
         // 기본 체크아웃 대신 동작할 스테이지
         // stage("GitHub dev branch checkout") {
         //     steps {
@@ -49,6 +41,15 @@ pipeline {
         stage('maven build, test, packageing(war)') {
             steps {
                 sh 'mvn clean install'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                script {
+                    def pullRequestId = params.ghprbPullId
+                    echo "GitHub Pull Request ID: ${pullRequestId}"
+                }
             }
         }
         
