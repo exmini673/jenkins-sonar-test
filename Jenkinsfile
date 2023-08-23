@@ -6,7 +6,8 @@ pipeline {
             registryUrl 'https://index.docker.io/v1/'
             registryCredentialsId 'docker-hub'
          }
-        
+    }
+    
     environment {
         GC = credentials('jenkins-sonar-token') // 생성
         GIT_REPO = 'jenkins-sonar-test'
