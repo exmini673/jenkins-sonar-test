@@ -26,6 +26,7 @@ pipeline {
                 sh 'docker push ${GIT_USERNAME}/${GIT_REPO}:${TAG_VERSION}'
             }
         }
+    }
         
   
     triggers {
