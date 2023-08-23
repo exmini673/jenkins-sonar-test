@@ -11,24 +11,7 @@ pipeline {
     parameters {
         string(name: 'ghprbPullId', defaultValue: '', description: 'GitHub Pull Request ID')
     }
-
-    stages {
-        stage('Docker Build') {
-            agent {
-                docker {
-                    image 'maven:3.8.3-openjdk-17'
-                    registryUrl 'https://index.docker.io/v1/'
-                    registryCredentialsId 'docker-hub'
-                }
-            }
-            steps {
-                sh 'docker build -t ${GIT_USERNAME}/${GIT_REPO}:${TAG_VERSION} .'
-                sh 'docker push ${GIT_USERNAME}/${GIT_REPO}:${TAG_VERSION}'
-            }
-        }
-    }
-        
-  
+    
     triggers {
         githubPush()
     }
