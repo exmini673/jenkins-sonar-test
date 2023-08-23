@@ -37,7 +37,20 @@ pipeline {
                     ]
                 )
             }
-        }  
+        }
+        stage('Docker Build') {
+            agent {
+                docker {
+                    image 'maven:3.8.3-openjdk-17'
+                    registryUrl 'https://index.docker.io/v1/'
+                    registryCredentialsId 'docker-hub'
+                }
+            }
+            steps {
+                sh 'docker build -t ${GIT_USERNAME}/${GIT_REPO}:${TAG_VERSION} .'
+                sh 'docker push ${GIT_USERNAME}/${GIT_REPO}:${TAG_VERSION}'
+            }
+        }
         stage('maven build, test, packageing(war)') {
             steps {
                 sh 'mvn clean install'
