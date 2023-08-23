@@ -9,7 +9,7 @@ pipeline {
     }
 
     parameters {
-        string(name: 'ghprbPullId', defaultValue: '', description: 'GitHub Pull Request ID')
+        string(name: 'ghprbPullId', defaultValue: 'dev', description: 'GitHub Pull Request ID')
     }
     
     triggers {
