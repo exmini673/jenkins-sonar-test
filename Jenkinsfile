@@ -17,10 +17,51 @@ pipeline {
     triggers {
         githubPush()
     }
+    options {
+        // 트리거 발생할 때 동작하는 기본 체크아웃 과정 생략
+        skipDefaultCheckout(true)
+    }
     stages {
+        // 기본 체크아웃 대신 동작할 스테이지
+        stage("GitHub dev branch checkout") {
+            steps {
+                checkout scm: scmGit(
+                    userRemoteConfigs: [
+                        [
+                            credentialsId: "jenkins-sonar-token",
+                            url: "https://github.com/exmini673/${GIT_REPO}.git"
+                        ]
+                    ],
+                    branches: [
+                        [
+                            name: "release-*"
+                        ]
+                    ]
+                )
+            }
+        }  
         stage('maven build, test, packageing(war)') {
             steps {
                 sh 'mvn clean install'
+            }
+        }
+        stage('Testing & QC') {
+            steps {
+                script {
+                    withSonarQubeEnv('sonar') {
+                       sh """
+                            docker run --rm \
+                              -e SONAR_HOST_URL=$SONAR_HOST_URL \
+                              -e SONAR_LOGIN=$SONAR_AUTH_TOKEN \
+                              -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=sonar_project01' \
+                              -v /var/lib/docker/volumes/jenkins-volume/_data/workspace/jenkins-sonar-test:/usr/src \
+                              sonarsource/sonar-scanner-cli
+                        """
+                    }
+                }
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
 
