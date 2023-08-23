@@ -38,6 +38,14 @@ pipeline {
                 )
             }
         }
+        stage('Build') {
+            steps {
+                script {
+                    def pullRequestId = params.ghprbPullId
+                    echo "GitHub Pull Request ID: ${pullRequestId}"
+                }
+            }
+        }
         stage('Docker Build') {
             agent {
                 docker {
@@ -54,15 +62,6 @@ pipeline {
         stage('maven build, test, packageing(war)') {
             steps {
                 sh 'mvn clean install'
-            }
-        }
-        
-        stage('Build') {
-            steps {
-                script {
-                    def pullRequestId = params.ghprbPullId
-                    echo "GitHub Pull Request ID: ${pullRequestId}"
-                }
             }
         }
         
