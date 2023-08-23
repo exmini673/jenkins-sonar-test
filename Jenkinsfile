@@ -53,9 +53,7 @@ pipeline {
                 }
             }
         }
-        stage('Docker Build') {
-
-        }
+        
         stage('maven build, test, packageing(war)') {
             steps {
                 sh 'mvn clean install'
