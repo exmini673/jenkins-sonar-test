@@ -1,6 +1,12 @@
 pipeline {
-    agent any
     
+    agent {
+         docker {
+            image 'maven:3.8.3-openjdk-17'
+            registryUrl 'https://index.docker.io/v1/'
+            registryCredentialsId 'docker-hub'
+         }
+        
     environment {
         GC = credentials('jenkins-sonar-token') // 생성
         GIT_REPO = 'jenkins-sonar-test'
@@ -47,13 +53,7 @@ pipeline {
             }
         }
         stage('Docker Build') {
-            agent {
-                docker {
-                    image 'maven:3.8.3-openjdk-17'
-                    registryUrl 'https://index.docker.io/v1/'
-                    registryCredentialsId 'docker-hub'
-                }
-            }
+
         }
         stage('maven build, test, packageing(war)') {
             steps {
