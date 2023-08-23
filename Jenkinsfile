@@ -54,7 +54,7 @@ pipeline {
                               -e SONAR_HOST_URL=$SONAR_HOST_URL \
                               -e SONAR_LOGIN=$SONAR_AUTH_TOKEN \
                               -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=jenkins-sonar-test' \
-                              -v /var/jenkins_home/workspace/jenkins-sonar-test:/usr/src \
+                              -v /var/lib/docker/volumes/jenkins-volume/_data/workspace/jenkins-sonar-test:/usr/src \
                               sonarsource/sonar-scanner-cli
                         """
                     }
