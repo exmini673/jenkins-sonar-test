@@ -1,22 +1,33 @@
 pipeline {
-    agent any {
-        docker {
-            image 'maven:3.8.3-openjdk-17'
-            reuseNode true
-            registryUrl 'https://index.docker.io/v1/'
-            registryCredentialsId 'docker-hub'
-        }
-        parameters {
-        string(name: 'ghprbPullId', defaultValue: '', description: 'GitHub Pull Request ID')
-    }
-    }
+    agent any
+    
     environment {
         GC = credentials('jenkins-sonar-token') // 생성
         GIT_REPO = 'jenkins-sonar-test'
         GIT_USERNAME = 'exmini673'
         TAG_VERSION = 'v1.0.0'
-       }
-    
+    }
+
+    parameters {
+        string(name: 'ghprbPullId', defaultValue: '', description: 'GitHub Pull Request ID')
+    }
+
+    stages {
+        stage('Docker Build') {
+            agent {
+                docker {
+                    image 'maven:3.8.3-openjdk-17'
+                    registryUrl 'https://index.docker.io/v1/'
+                    registryCredentialsId 'docker-hub'
+                }
+            }
+            steps {
+                sh 'docker build -t ${GIT_USERNAME}/${GIT_REPO}:${TAG_VERSION} .'
+                sh 'docker push ${GIT_USERNAME}/${GIT_REPO}:${TAG_VERSION}'
+            }
+        }
+        
+  
     triggers {
         githubPush()
     }
