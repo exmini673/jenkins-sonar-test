@@ -1,11 +1,14 @@
 pipeline {
-    agent {
+    agent any {
         docker {
             image 'maven:3.8.3-openjdk-17'
             reuseNode true
             registryUrl 'https://index.docker.io/v1/'
             registryCredentialsId 'docker-hub'
         }
+        parameters {
+        string(name: 'ghprbPullId', defaultValue: '', description: 'GitHub Pull Request ID')
+    }
     }
     environment {
         GC = credentials('jenkins-sonar-token') // 생성
@@ -22,24 +25,32 @@ pipeline {
         skipDefaultCheckout(true)
     }
     stages {
-        // 기본 체크아웃 대신 동작할 스테이지
-        stage("GitHub dev branch checkout") {
+        stage('Build') {
             steps {
-                checkout scm: scmGit(
-                    userRemoteConfigs: [
-                        [
-                            credentialsId: "jenkins-sonar-token",
-                            url: "https://github.com/exmini673/${GIT_REPO}.git"
-                        ]
-                    ],
-                    branches: [
-                        [
-                            name: "release-*"
-                        ]
-                    ]
-                )
+                script {
+                    def pullRequestId = params.ghprbPullId
+                    echo "GitHub Pull Request ID: ${pullRequestId}"
+                }
             }
-        }  
+        }
+        // 기본 체크아웃 대신 동작할 스테이지
+        // stage("GitHub dev branch checkout") {
+        //     steps {
+        //         checkout scm: scmGit(
+        //             userRemoteConfigs: [
+        //                 [
+        //                     credentialsId: "jenkins-sonar-token",
+        //                     url: "https://github.com/exmini673/${GIT_REPO}.git"
+        //                 ]
+        //             ],
+        //             branches: [
+        //                 [
+        //                     name: "release-*"
+        //                 ]
+        //             ]
+        //         )
+        //     }
+        // }  
         stage('maven build, test, packageing(war)') {
             steps {
                 sh 'mvn clean install'
