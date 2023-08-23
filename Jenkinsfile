@@ -40,11 +40,11 @@ pipeline {
                 )
             }
         }  
-        // stage('maven build, test, packageing(war)') {
-        //     steps {
-        //         sh 'mvn clean install'
-        //     }
-        // }
+        stage('maven build, test, packageing(war)') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
         stage('Testing & QC') {
             steps {
                 script {
