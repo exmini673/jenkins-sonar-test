@@ -46,7 +46,7 @@ pipeline {
             }
         }
         
-        stage('Build') {
+        stage('confirm pullRequestId') {
             steps {
                 script {
                     def pullRequestId = params.ghprbPullId
@@ -82,45 +82,45 @@ pipeline {
         }
         
 
-        // stage('github create release') {
-        //     steps {
-        //         script {
-        //              def response = sh(script: """
-        //                 curl -sSL \
-        //                     -X POST \
-        //                     -H "Accept: application/vnd.github+json" \
-        //                     -H "Authorization: Bearer ${GC_PSW}" \
-        //                     -H "X-GitHub-Api-Version: 2022-11-28" \
-        //                     https://api.github.com/repos/${GIT_USERNAME}/${GIT_REPO}/releases \
-        //                     -d '{
-        //                             "tag_name":"${TAG_VERSION}",
-        //                             "target_commitish":"main",
-        //                             "name":"Release ${TAG_VERSION}",
-        //                             "body":"Description of the release",
-        //                             "draft":false,
-        //                             "prerelease":false,
-        //                             "generate_release_notes":false
-        //                         }'
-        //             """, returnStdout: true)
+        stage('github create release') {
+            steps {
+                script {
+                     def response = sh(script: """
+                        curl -sSL \
+                            -X POST \
+                            -H "Accept: application/vnd.github+json" \
+                            -H "Authorization: Bearer ${GC_PSW}" \
+                            -H "X-GitHub-Api-Version: 2022-11-28" \
+                            https://api.github.com/repos/${GIT_USERNAME}/${GIT_REPO}/releases \
+                            -d '{
+                                    "tag_name":"${TAG_VERSION}",
+                                    "target_commitish":"release-v0.0.3",
+                                    "name":"Release ${TAG_VERSION}",
+                                    "body":"Description of the release",
+                                    "draft":false,
+                                    "prerelease":false,
+                                    "generate_release_notes":false
+                                }'
+                    """, returnStdout: true)
 
-        //             def json = readJSON text: "$response"
-        //             def id = json.id
+                    def json = readJSON text: "$response"
+                    def id = json.id
 
-        //             sh "mv target/demo-0.0.1-SNAPSHOT.war ${GIT_REPO}-${TAG_VERSION}.war"
+                    sh "mv target/demo-0.0.1-SNAPSHOT.war ${GIT_REPO}-${TAG_VERSION}.war"
 
-        //             sh """
-        //                 curl -sSL \
-        //                     -X POST \
-        //                     -H "Accept: application/vnd.github+json" \
-        //                     -H "Authorization: Bearer ${GC_PSW}" \
-        //                     -H "X-GitHub-Api-Version: 2022-11-28" \
-        //                     -H "Content-Type: application/octet-stream" \
-        //                     "https://uploads.github.com/repos/${GIT_USERNAME}/${GIT_REPO}/releases/${id}/assets?name=${GIT_REPO}-${TAG_VERSION}.war" \
-        //                     --data-binary "@${GIT_REPO}-${TAG_VERSION}.war"
-        //             """
+                    sh """
+                        curl -sSL \
+                            -X POST \
+                            -H "Accept: application/vnd.github+json" \
+                            -H "Authorization: Bearer ${GC_PSW}" \
+                            -H "X-GitHub-Api-Version: 2022-11-28" \
+                            -H "Content-Type: application/octet-stream" \
+                            "https://uploads.github.com/repos/${GIT_USERNAME}/${GIT_REPO}/releases/${id}/assets?name=${GIT_REPO}-${TAG_VERSION}.war" \
+                            --data-binary "@${GIT_REPO}-${TAG_VERSION}.war"
+                    """
                     
-        //         }
-        //     }       
-        // }
+                }
+            }       
+        }
     }
 }
