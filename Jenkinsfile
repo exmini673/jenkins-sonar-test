@@ -18,11 +18,13 @@ pipeline {
     triggers {
         githubPush()
     }
+  
     parameters {
         // pull request ID를 출력하는 파라미터 변수 설정
         string(name: 'ghprbPullId', defaultValue: '', description: 'GitHub Pull Request ID')
     }
     
+
     options {
         // 트리거 발생할 때 동작하는 기본 체크아웃 과정 생략
         skipDefaultCheckout(true)
@@ -31,7 +33,9 @@ pipeline {
         // 기본 체크아웃 대신 동작할 스테이지
         stage("GitHub dev branch checkout") {
             steps {
-                checkout scm:scmGit(
+
+                checkout scm: scmGit(
+                  
                     userRemoteConfigs: [
                         [
                             credentialsId: "jenkins-sonar-token",
@@ -45,6 +49,7 @@ pipeline {
                     ]
                 )
             }
+
         }
         stage('PullRequestId Build') {
             steps {
@@ -52,6 +57,7 @@ pipeline {
                     def pullRequestId = params.ghprbPullId
                     echo "GitHub Pull Request ID: ${pullRequestId}"
                 }
+
             }
         }
         
@@ -80,7 +86,6 @@ pipeline {
                 }
             }
         }
-        
 
         stage('github create release') {
             steps {
@@ -94,7 +99,7 @@ pipeline {
                             https://api.github.com/repos/${GIT_USERNAME}/${GIT_REPO}/releases \
                             -d '{
                                     "tag_name":"${TAG_VERSION}",
-                                    "target_commitish":"release-v0.0.3",
+                                    "target_commitish":"release-v0.0.5",
                                     "name":"Release ${TAG_VERSION}",
                                     "body":"Description of the release",
                                     "draft":false,
