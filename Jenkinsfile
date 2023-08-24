@@ -106,7 +106,7 @@ pipeline {
                     def json = readJSON text: "$response"
                     def id = json.id
 
-                    sh "mv target/demo-0.0.2-SNAPSHOT.war ${GIT_REPO}-${TAG_VERSION}.war"
+                    sh "mv target/demo-0.0.1-SNAPSHOT.war ${GIT_REPO}-${TAG_VERSION}.war"
 
                     sh """
                         curl -sSL \
