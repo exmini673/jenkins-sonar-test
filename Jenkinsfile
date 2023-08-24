@@ -14,13 +14,13 @@ pipeline {
         GIT_USERNAME = 'exmini673'
         TAG_VERSION = 'v1.0.0'
     }
-
-    parameters {
-        string(name: 'ghprbPullId', defaultValue: '', description: 'GitHub Pull Request ID')
-    }
     
     triggers {
         githubPush()
+    }
+    
+    parameters {
+        string(name: 'ghprbPullId', defaultValue: '', description: 'GitHub Pull Request ID')
     }
     options {
         // 트리거 발생할 때 동작하는 기본 체크아웃 과정 생략
