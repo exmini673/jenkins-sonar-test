@@ -1,21 +1,26 @@
 pipeline {
+    
     agent {
-        docker {
+         docker {
             image 'maven:3.8.3-openjdk-17'
-            reuseNode true
             registryUrl 'https://index.docker.io/v1/'
             registryCredentialsId 'docker-hub'
-        }
+         }
     }
+    
     environment {
         GC = credentials('jenkins-sonar-token') // 생성
         GIT_REPO = 'jenkins-sonar-test'
         GIT_USERNAME = 'exmini673'
         TAG_VERSION = 'v1.0.0'
-       }
+    }
     
     triggers {
         githubPush()
+    }
+    
+    parameters {
+        string(name: 'ghprbPullId', defaultValue: '', description: 'GitHub Pull Request ID')
     }
     options {
         // 트리거 발생할 때 동작하는 기본 체크아웃 과정 생략
@@ -39,7 +44,16 @@ pipeline {
                     ]
                 )
             }
-        }  
+        }
+        stage('Build') {
+            steps {
+                script {
+                    def pullRequestId = params.ghprbPullId
+                    echo "GitHub Pull Request ID: ${pullRequestId}"
+                }
+            }
+        }
+        
         stage('maven build, test, packageing(war)') {
             steps {
                 sh 'mvn clean install'
