@@ -19,9 +19,6 @@ pipeline {
         githubPush()
     }
     
-    parameters {
-        string(name: 'ghprbPullId', defaultValue: '', description: 'GitHub Pull Request ID')
-    }
     options {
         // 트리거 발생할 때 동작하는 기본 체크아웃 과정 생략
         skipDefaultCheckout(true)
@@ -43,15 +40,6 @@ pipeline {
                         ]
                     ]
                 )
-            }
-        }
-        
-        stage('confirm pullRequestId') {
-            steps {
-                script {
-                    def pullRequestId = params.ghprbPullId
-                    echo "GitHub Pull Request ID: ${pullRequestId}"
-                }
             }
         }
         
