@@ -57,7 +57,7 @@ pipeline {
                             docker run --rm \
                               -e SONAR_HOST_URL=$SONAR_HOST_URL \
                               -e SONAR_LOGIN=$SONAR_AUTH_TOKEN \
-                              -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=sonar_project01' \
+                              -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=sonar_project01 -Dsonar.java.binaries=./target' \
                               -v /var/lib/docker/volumes/jenkins-volume/_data/workspace/jenkins-sonar-test:/usr/src \
                               sonarsource/sonar-scanner-cli
                         """
@@ -94,7 +94,7 @@ pipeline {
                     def json = readJSON text: "$response"
                     def id = json.id
 
-                    sh "mv target/demo-0.0.1-SNAPSHOT.war ${GIT_REPO}-${TAG_VERSION}.war"
+                    sh "mv target/demo-0.0.2-SNAPSHOT.war ${GIT_REPO}-${TAG_VERSION}.war"
 
                     sh """
                         curl -sSL \
