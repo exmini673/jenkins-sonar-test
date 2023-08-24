@@ -18,6 +18,10 @@ pipeline {
     triggers {
         githubPush()
     }
+    parameters {
+        // pull request ID를 출력하는 파라미터 변수 설정
+        string(name: 'ghprbPullId', defaultValue: '', description: 'GitHub Pull Request ID')
+    }
     
     options {
         // 트리거 발생할 때 동작하는 기본 체크아웃 과정 생략
@@ -40,6 +44,14 @@ pipeline {
                         ]
                     ]
                 )
+            }
+        }
+        stage('PullRequestId Build') {
+            steps {
+                script {
+                    def pullRequestId = params.ghprbPullId
+                    echo "GitHub Pull Request ID: ${pullRequestId}"
+                }
             }
         }
         
