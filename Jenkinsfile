@@ -30,7 +30,7 @@ pipeline {
         // 기본 체크아웃 대신 동작할 스테이지
         stage("GitHub dev branch checkout") {
             steps {
-                checkout scm: scmGit(
+                checkout scm:scmGit(
                     userRemoteConfigs: [
                         [
                             credentialsId: "jenkins-sonar-token",
@@ -40,7 +40,6 @@ pipeline {
                     branches: [
                         [
                             name: "release-*"
-                            echo "${ghprbPullId}"
                         ]
                     ]
                 )
