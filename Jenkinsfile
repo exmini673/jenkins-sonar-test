@@ -94,7 +94,7 @@ pipeline {
                             https://api.github.com/repos/${GIT_USERNAME}/${GIT_REPO}/releases \
                             -d '{
                                     "tag_name":"${TAG_VERSION}",
-                                    "target_commitish":"release-v0.0.3",
+                                    "target_commitish":"release-v0.0.5",
                                     "name":"Release ${TAG_VERSION}",
                                     "body":"Description of the release",
                                     "draft":false,
