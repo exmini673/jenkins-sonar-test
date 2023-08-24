@@ -40,11 +40,13 @@ pipeline {
                     branches: [
                         [
                             name: "release-*"
+                            echo "${ghprbPullId}"
                         ]
                     ]
                 )
             }
         }
+        
         stage('Build') {
             steps {
                 script {
