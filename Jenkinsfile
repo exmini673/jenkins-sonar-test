@@ -108,6 +108,7 @@ pipeline {
 
                     sh "mv target/demo-0.0.1-SNAPSHOT.war ${GIT_REPO}-${TAG_VERSION}.war"
 
+
                     sh """
                         curl -sSL \
                             -X POST \
